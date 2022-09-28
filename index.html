@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contador</title>
+    <link rel="icon" type="imagem/png" href="icon.png" />
+    <link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+
+<body onload="carregarHora()">
+
+    <div id="contador" class="container">
+        <div class="box">
+            <h1 id="titulo" ondblclick="apagarDados()">Contador</h1>
+            <input id="campoTexto" class="campoTexto" type="text" placeholder="Digite o nome do Item"><br><br>
+            <input onmouseup="botaoConfirmar()" id="botaoConfirmar" class="botao" type="button" value="Confirmar">
+            <div id="hora"></div>
+
+        </div>
+    </div>
+
+    <script src="contador.js"></script>
+
+</body>
+
+</html>

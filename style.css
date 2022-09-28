@@ -1,0 +1,45 @@
+.container {
+    width: 100vw;
+    height: 100vh;
+    background: #4A5474;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    border: #6C7A89;
+}
+
+.box {
+    text-align: center;
+    width: 300px;
+    height: 300px;
+    background: #393F56;
+    margin: 5px auto;
+    color: #ffffff;
+}
+
+body {
+    margin: 0px;
+}
+
+.campoTexto {
+    width: 80%;
+    height: 20px;
+    outline: none;
+    margin: 0 auto;
+    padding: 10px;
+    border: none;
+    margin-bottom: 10px;
+    border-radius: 50px;
+}
+
+.botao {
+    width: 35%;
+    height: 35px;
+    text-align: center;
+    background: #AE3D5A;
+    color: #ffffff;
+    border-color: #ffffff;
+    margin-bottom: 10px;
+    border-radius: 50px;
+}
