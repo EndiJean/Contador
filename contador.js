@@ -44,9 +44,7 @@ function botaoConfirmar() {
             salvarLocalStorage('horaFinal', data());
 
             // pega hora incial e final e retorna a hora total;
-            var horaInicial = localStorage.getItem('horaInicial');
-            var horaFinal = localStorage.getItem('horaFinal');
-            var horaTotal = horaFinal - horaInicial;
+            var horaTotal = calcularHora(localStorage.getItem('horaInicial'), localStorage.getItem('horaFinal'))
 
             //salva a hora final na localStorage;
             salvarLocalStorage('horaTotal', horaTotal);
@@ -55,7 +53,7 @@ function botaoConfirmar() {
             var getTempoGasto = new Number(localStorage.getItem('tempoGasto'));
 
             // soma o ultimo valor gasto com o atual;
-            var tempoGasto = soma(getTempoGasto, horaTotal);
+            var tempoGasto = soma(parseInt(getTempoGasto), horaTotal);
             salvarLocalStorage('tempoGasto', tempoGasto);
 
             //Muda o botao pra iniciar;
@@ -187,4 +185,18 @@ function apagarDados() {
         },
         function() {}
     )
+}
+
+function dividirString(texto, separador) {
+    var array = texto.split(separador);
+    return array;
+}
+
+function converterMinutos(n1) {
+    return parseInt((dividirString(n1, ':')[0]) * 60) + parseInt(dividirString(n1, ':')[1]);
+}
+
+function calcularHora(n1, n2) {
+    var total = converterMinutos(n2) - converterMinutos(n1);
+    return addZeroes(total);
 }
