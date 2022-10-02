@@ -150,7 +150,7 @@ function addZeroes(num) {
 */
 function data() {
     let d = new Date();
-    return addZeroes(d.getHours()) + "" + addZeroes(d.getMinutes());
+    return addZeroes(d.getHours()) + ":" + addZeroes(d.getMinutes());
 }
 
 
