@@ -56,6 +56,10 @@ function botaoConfirmar() {
             var tempoGasto = soma(parseInt(getTempoGasto), horaTotal);
             salvarLocalStorage('tempoGasto', tempoGasto);
 
+            alert("     \tHora inicial: " + localStorage.getItem('horaInicial') +
+                "\n     \tHora final: " + localStorage.getItem('horaFinal') +
+                "\n     \tTempo gasto: " + tempoGasto);
+
             //Muda o botao pra iniciar;
             mudarNomeBotao('Iniciar');
 
@@ -199,4 +203,8 @@ function converterMinutos(n1) {
 function calcularHora(n1, n2) {
     var total = converterMinutos(n2) - converterMinutos(n1);
     return addZeroes(total);
+}
+
+function abrirJanela(URL) {
+    window.open(URL, 'janela', 'width=795, height=590, top=100, left=699, scrollbars=no, status=no, toolbar=no, location=no, menubar=no, resizable=no, fullscreen=no');
 }
