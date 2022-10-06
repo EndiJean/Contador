@@ -41,7 +41,12 @@ function botaoConfirmar() {
 
             montarTelaParar();
         } else if (document.getElementById('botaoConfirmar').value == "Parar") {
-            salvarLocalStorage('horaFinal', data());
+            if (tiraPontoHora(data(), ":") < tiraPontoHora(localStorage.getItem('horaInicial'), ":")) {
+                var horaFinal = prompt('O hora inicial é menor que a hora final.\nInforme um horário valida.');
+                salvarLocalStorage('horaFinal', horaFinal);
+            } else {
+                salvarLocalStorage('horaFinal', data());
+            }
 
             // pega hora incial e final e retorna a hora total;
             var horaTotal = calcularHora(localStorage.getItem('horaInicial'), localStorage.getItem('horaFinal'))
@@ -194,6 +199,11 @@ function apagarDados() {
 function dividirString(texto, separador) {
     var array = texto.split(separador);
     return array;
+}
+
+function tiraPontoHora(texto, separador) {
+    var array = texto.split(separador);
+    return array[0] + array[1];
 }
 
 function converterMinutos(n1) {
