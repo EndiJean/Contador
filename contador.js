@@ -1,14 +1,19 @@
 function carregarHora() {
     if (localStorage.getItem('nomeItem') == null) {
-        esconderCampoHora();
+        esconderCampo('hora');
+        esconderCampo('campoInicial');
+        esconderCampo('campoParar');
     } else {
         if (localStorage.getItem('horaInicial') == null) {
+            esconderCampo('campoParar');
             montarTelaIniciar();
         } else {
             if (localStorage.getItem('horaFinal') == null) {
                 montarTelaParar();
             } else {
                 if (localStorage.getItem('horaFinal') > localStorage.getItem('horaInicial')) {
+                    mostrarCampo('campoInicial');
+                    esconderCampo('campoParar');
                     montarTelaIniciar();
                     //Mostra as horas gastas;
                     var hora = window.document.querySelector('div#hora')
@@ -27,51 +32,83 @@ function botaoConfirmar() {
         document.getElementById("campoTexto").focus();
     } else {
         if (document.getElementById('botaoConfirmar').value == "Confirmar" && localStorage.getItem('nomeItem') == null) {
-            esconderCampoPesquisa();
+            esconderCampo('camposIndex');
             //Pega o valor do input(nome do item);
             var item = window.document.querySelector('#campoTexto');
             var itemNome = item.value;
 
             salvarLocalStorage('nomeItem', itemNome);
 
+            mostrarCampo('campoInicial');
             montarTelaIniciar();
 
         } else if (document.getElementById('botaoConfirmar').value == "Iniciar") {
-            salvarLocalStorage('horaInicial', data());
+            var inicio = window.document.querySelector('#horaInicial');
+            var horaInicial = inicio.value;
+            if (horaInicial != null && horaInicial.length > 1) {
+                if (validaHora(horaInicial)) {
+                    salvarLocalStorage('horaInicial', adicionaPonto(horaInicial));
+                    mostrarCampo('campoParar');
+                    limparCampo('horaInicial');
 
-            montarTelaParar();
-        } else if (document.getElementById('botaoConfirmar').value == "Parar") {
-            if (tiraPontoHora(data(), ":") < tiraPontoHora(localStorage.getItem('horaInicial'), ":")) {
-                var horaFinal = prompt('O hora inicial é menor que a hora final.\nInforme um horário valida.');
-                salvarLocalStorage('horaFinal', horaFinal);
+                    montarTelaParar();
+                } else {
+                    alert('Informe um horario valido.\nEx.: (1600)');
+                }
             } else {
-                salvarLocalStorage('horaFinal', data());
+                salvarLocalStorage('horaInicial', data());
+                mostrarCampo('campoParar');
+                limparCampo('horaInicial');
+
+                montarTelaParar();
             }
 
-            // pega hora incial e final e retorna a hora total;
-            var horaTotal = calcularHora(localStorage.getItem('horaInicial'), localStorage.getItem('horaFinal'))
+        } else if (document.getElementById('botaoConfirmar').value == "Parar") {
+            var final = window.document.querySelector('#horaFinal');
+            var horaFinal = final.value;
 
-            //salva a hora final na localStorage;
-            salvarLocalStorage('horaTotal', horaTotal);
+            var validacao = false;
 
-            //Pega o ultimo valor gasto registrado;
-            var getTempoGasto = new Number(localStorage.getItem('tempoGasto'));
+            if (horaFinal != null && horaFinal > 1) {
+                if (validaHora(horaFinal)) {
+                    salvarLocalStorage('horaFinal', adicionaPonto(horaFinal));
+                    validacao = true;
+                } else {
+                    alert('Informe um horario valido.\nEx.: (1600)');
+                }
+            } else {
+                salvarLocalStorage('horaFinal', data());
+                validacao = true;
+            }
 
-            // soma o ultimo valor gasto com o atual;
-            var tempoGasto = soma(parseInt(getTempoGasto), horaTotal);
-            salvarLocalStorage('tempoGasto', tempoGasto);
+            if (validacao) {
 
-            alert("     \tHora inicial: " + localStorage.getItem('horaInicial') +
-                "\n     \tHora final: " + localStorage.getItem('horaFinal') +
-                "\n     \tTempo gasto: " + tempoGasto);
+                // pega hora incial e final e retorna a hora total;
+                var horaTotal = calcularHora(localStorage.getItem('horaInicial'), localStorage.getItem('horaFinal'))
 
-            //Muda o botao pra iniciar;
-            mudarNomeBotao('Iniciar');
+                //salva a hora final na localStorage;
+                salvarLocalStorage('horaTotal', horaTotal);
 
-            mostrarCampoHora();
-            //Mostra as horas gastas;
-            var hora = window.document.querySelector('div#hora')
-            hora.innerHTML = `<p><strong>${converterHora(tempoGasto)}</strong></p>`;
+                //Pega o ultimo valor gasto registrado;
+                var getTempoGasto = new Number(localStorage.getItem('tempoGasto'));
+
+                // soma o ultimo valor gasto com o atual;
+                var tempoGasto = soma(parseInt(getTempoGasto), horaTotal);
+                salvarLocalStorage('tempoGasto', tempoGasto);
+
+                //Muda o botao pra iniciar;
+                mudarNomeBotao('Iniciar');
+
+                mostrarCampo('hora');
+                mostrarCampo('campoInicial');
+                esconderCampo('campoParar');
+
+                limparCampo('horaFinal');
+
+                //Mostra as horas gastas;
+                var hora = window.document.querySelector('div#hora')
+                hora.innerHTML = `<p><strong>${converterHora(tempoGasto)}</strong></p>`;
+            }
         }
     }
 }
@@ -86,11 +123,12 @@ function montarTelaIniciar() {
     //muda o nome do botao para iniciar;
     mudarNomeBotao('Iniciar');
 
-    esconderCampoPesquisa();
+    esconderCampo('camposIndex');
 }
 
 function montarTelaParar() {
-    esconderCampoHora();
+    esconderCampo('hora');
+    esconderCampo('campoInicial');
     montarTelaIniciar();
 
     //Muda o nome do botao para parar;
@@ -114,29 +152,25 @@ function salvarLocalStorage(key, value) {
 /*
 / Esconde input da tela inicial
 */
-function esconderCampoPesquisa() {
-    document.getElementById("campoTexto").style.display = "none";
+function esconderCampo(nomeCampo) {
+    document.getElementById(nomeCampo).style.display = "none";
+    document.getElementById(nomeCampo).style.textAlign = "center";
 }
-
 /*
 / Mostra input da tela inicial
 */
-function mostrarCampoPesquisa() {
-    document.getElementById("campoTexto").style.display = "block";
+function mostrarCampo(nomeCampo) {
+    document.getElementById(nomeCampo).style.display = "block";
 }
 
-/*
-/ Esconde div de hora
-*/
-function esconderCampoHora() {
-    document.getElementById("hora").style.display = "none";
+function limparCampo(nomeCampo) {
+    document.getElementById(nomeCampo).value = '';
 }
 
-/*
-/ Mostra div de hora
-*/
-function mostrarCampoHora() {
-    document.getElementById("hora").style.display = "block";
+function adicionaPonto(hora) {
+    var horas = hora.slice(0, 2);
+    var minutos = hora.slice(2, 4);
+    return horas + ':' + minutos;
 }
 
 /*
@@ -162,6 +196,28 @@ function data() {
     return addZeroes(d.getHours()) + ":" + addZeroes(d.getMinutes());
 }
 
+/*
+/ Valida se é um horario valido;
+*/
+function validaHora(hora) {
+    var horas = hora.slice(0, 2);
+    var minutos = hora.slice(2, 4);
+
+    if (hora.length != 4) {
+        // Verifica se é uma hora valida;
+        if (horas < 00 || horas > 24) {
+            return false;
+        }
+
+        // Verifica se é minuto valid0;
+        if (minutos < 00 || minutos > 60) {
+            return false;
+        }
+        return false;
+    }
+
+    return true;
+}
 
 function soma(n1 = 0, n2 = 0) {
     return parseInt(n1) + parseInt(n2);
@@ -213,8 +269,4 @@ function converterMinutos(n1) {
 function calcularHora(n1, n2) {
     var total = converterMinutos(n2) - converterMinutos(n1);
     return addZeroes(total);
-}
-
-function abrirJanela(URL) {
-    window.open(URL, 'janela', 'width=795, height=590, top=100, left=699, scrollbars=no, status=no, toolbar=no, location=no, menubar=no, resizable=no, fullscreen=no');
 }

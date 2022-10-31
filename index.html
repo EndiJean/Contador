@@ -13,16 +13,29 @@
 
 <body onload="carregarHora()">
 
-    <div id="contador" class="container">
-        <div class="box">
-            <h1 id="titulo" ondblclick="apagarDados()">Contador</h1>
-            <input id="campoTexto" class="campoTexto" type="text" placeholder="Digite o nome do Item"><br><br>
-            <input onmouseup="botaoConfirmar()" id="botaoConfirmar" class="botao" type="button" value="Confirmar">
-            <div id="hora"></div>
+    <div id="tela">
+        <div id="contador" class="container">
+            <div class="box">
+                <h1 id="titulo" ondblclick="apagarDados()">Contador</h1>
+                <div id="camposIndex">
+                    <input id="campoTexto" class="campoTexto" type="text" placeholder="Digite o nome do Item">
+                </div>
+                <div id="campoInicial">
+                    <input id="horaInicial" class="campoTexto campoInicial" type="number" placeholder="Hora Inicial">
+                </div>
+                <div id="campoParar">
+                    <input id="horaFinal" class="campoTexto" type="number" placeholder="Hora Final">
+                </div>
 
+                <div>
+                    <input onmouseup="botaoConfirmar()" onchage="criarTabela()" id="botaoConfirmar" class="botao" type="button" value="Confirmar">
+                </div>
+                <div id="hora"></div>
+            </div>
         </div>
-    </div>
 
+        <div id="tabela"> </div>
+    </div>
     <script src="contador.js"></script>
 
 </body>
